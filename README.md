@@ -11,6 +11,5 @@ The topics covered include (with *sequence* meaning DNA sequence):
 - RNA-seq assembly and analysis
 - Gene list functional annotation
 - Metagenomic analysis
-- Protein feature identification
 
 There are 6 lecture slide decks in `lectures` and 9 lab exercise sets in `labs`. Some labs do not have corresponding lecture slides.
