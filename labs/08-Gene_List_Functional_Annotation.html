@@ -1,0 +1,103 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 08</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 08&ensp;Gene List Functional Annotation</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<ol>
+  <li>Open the <a href="data/gene_list.xls">gene list</a>, which is an Excel file of 174 human genes differentially expressed in a microarray experiement. This gene list will be the input for functional annotation.
+  <li>The gene list was obtained from a <a href="https://www.bioinformatics.babraham.ac.uk/training.html#fagl" target="_blank">Babraham Bioinformatics course</a>, and part of this lab is adapted from the course material.
+</ol>
+
+<div id="panther" class="sectitle">Functional analysis with PANTHER</div>
+<hr>
+<ol>
+  <li>Go to the <a href="http://pantherdb.org" target="_blank">PANTHER</a> website. Make sure you have the &ldquo;Gene List Analysis&rdquo; tab open.
+  <li>Repeat the steps below, first with the Ensembl (Gene) IDs, and then with (Gene) Symbols. From Step 3, use either the IDs or symbols that are recognized more by PANTHER.
+  <ul class="level2">
+    <li>Copy the IDs from the corresponding column of the gene list and paste into the query text box.
+    <li>Select &ldquo;ID List&rdquo; as the the list type.
+    <li>Select &ldquo;Homo sapiens&rdquo; as the organism.
+    <li>Select &ldquo;Functional classification viewed in gene list&rdquo; as the analysis, and submit.
+    <li>Record the &ldquo;Number of mapped IDs found&rdquo;. 
+  </ul>
+  <li>In the result page of &ldquo;Functional classification viewed in gene list&rdquo;, use &ldquo;Customize Gene List&rdquo; to add &ldquo;PANTHER GO-Slim Biological Processes&rdquo;.
+  <li>In the updated result page, click the pie chart icon and select &ldquo;BP Pie Chart&rdquo;. What is the most frequently mapped GO term and how many genes map to it? Does this provide a good clue about the function of this gene list? Why or why not?
+  <li>Go back to the PANTHER home page. Use the same input but run the &ldquo;Statistical overrepresentation test&rdquo;, but <em>do not</em> use default settings, and submit. Select &ldquo;GO biological process complete&rdquo; as the &ldquo;Annotation Data Set&rdquo; before starting the analysis.
+  <li>What are the 3 most enriched GO biological processes? What is the maximum fold enrichment value? 
+  <li>Explain, conceptually (qualitatively), what the fold enrichments represent. Focus on the relation between the &ldquo;REF&rdquo; numbers and &ldquo;Client Text Box Input&rdquo; numbers.
+  <li>What is the GO biological process (except &ldquo;Unclassified&rdquo;) with the lowest <i>p</i>-value? What is the <i>p</i>-value?
+  <li>Follow the link for the GO biological process with the highest fold enrichment and the link for the GO biological process with the lowest <i>p</i>-value to get more information. From these two GO biological processes, do you have a better idea about the function of this gene list than from the most frequently mapped GO term alone (from Step 4 above)?
+</ol>
+
+<div id="david" class="sectitle">Functional analysis with DAVID</div>
+<hr>
+<ol>
+  <li>Go to the <a href="https://david.ncifcrf.gov" target="_blank">DAVID</a> website. Click &ldquo;Start Analysis&rdquo;.
+  <li>Open the &ldquo;Upload&rdquo; tab and submit your gene list:
+  <ul class="level2">
+    <li>From the same gene list as before, copy the gene symbols and paste into the &ldquo;Paste a list&rdquo; box.
+    <li>Select &ldquo;OFFICIAL_GENE_SYMBOL&rdquo; as the identifier type.
+    <li>Select &ldquo;Gene List&rdquo; as the list type.
+    <li>Submit the list. You will see the message about multiple species having been detected. From &ldquo;Gene List Manager&rdquo;, select human as the species and click &ldquo;Select Species&rdquo;. There will finally be a message telling you that your gene list submission was successful.
+  </ul>
+  <li>From the tools available, click &ldquo;Gene Name Batch Viewer&rdquo; and you will be presented with the &ldquo;Gene List Report&rdquo;. Using the report, answer these questions:
+  <ul class="level2">
+    <li>How many genes were recognized (mapped to DAVID IDs)?
+    <li>In the report, explore the &ldquo;Related Genes&rdquo; link of the LRRN3 gene to find how many genes out of your gene list are related to it. 
+    <li>From the &ldquo;Functional Related Genes&rdquo; page, set &ldquo;Options&rdquo; appropriately and click &ldquo;Rerun Using Options&rdquo;, to figure out how many (out of all, not just from your list) human genes are related to it. What is the human gene most related to LRRN3 (except itself) and its similarity score?
+  </ul>
+  <li>Go back to the list of tools to open &ldquo;Functional Annotation Chart&rdquo;. Using the chart, answer these questions:
+  <ul class="level2">
+    <li>How many annotation terms (records) are there?
+    <li>By default, the chart is sorted in ascending order of Benjamini-adjusted <i>p</i>-value (last column). Sort the chart by &ldquo;Category&rdquo; so that annotation terms from the same source are shown in adjacent rows. What is the top (lowest Benjamini) annotation term from the &ldquo;GOTERM_BP_DIRECT&rdquo; annotation source and how many genes are annotated with it?
+    <li>Is the lowest-Benjamini GO term the same as the GO biological process with the lowest <i>p</i>-value from PANTHER statistical overrepresentation test (from Step 1.8)? If not, what is the relationship between the two GO terms?
+    <li>Set &ldquo;Options&rdquo; to list only those terms with at least 4 genes mapped and to display &ldquo;Fold Enrichment&rdquo;. How many annotation terms are listed now? Do you find the same GO term as one of the 3 most enriched GO biological process from PANTHER (from Step 1.6)? If yes, are the fold enrichment values for the term from PANTHER and from DAVID similar?
+  </ul>
+  <li>Go back to the list of tools to open &ldquo;Functional Annotation Clustering&rdquo;. Using the cluster information, answer these questions:
+  <ul class="level2">
+    <li>Find an &ldquo;Annotation Cluster&rdquo; (cluster of related annotation terms) that includes the lowest-Benjamini GO Biological Process term from the previous step. 
+    <li>What is the cluster enrichment score, the lowest Benjamini value found in the cluster, and the number of genes in the cluster (do not actually count, but find a symbol to click on)?
+    <li>Find another cluster with the most &ldquo;KEGG_PATHWAY&rdquo; terms in it. View the actual pathways of the top few terms, and guess which human body part the genes in this cluster are most closely related to.
+  </ul>
+</ol>
+
+<div id="toppgene" class="sectitle">Functional analysis with ToppGene</div>
+<hr>
+<ol>
+  <li>Go to the <a href="https://toppgene.cchmc.org" target="_blank">ToppGene</a> website. Open &ldquo;ToppFun&rdquo; for gene list functional enrichment analysis.
+  <li>Run the analysis:
+  <ul class="level2">
+    <li>From our gene list, copy the gene symbols and paste into the &ldquo;Training Gene Set&rdquo; box. The &ldquo;Entry Type&rdquo; is already gene symbol (&ldquo;HGNC Symbol&rdquo;) by default, so submit the gene list.
+    <li>If there are genes not found, under &ldquo;Input Gene List&rdquo;, find alternatives for missing symbols, so that as many gene symbols as possible can be used.
+    <li>Leave the calculation settings at their defaults and start the analysis.
+  </ul>
+  <li>Using the results, answer these questions:
+  <ul class="level2">
+    <li>Do the top few GO Biological Processes agree with what you obtained from PANTHER or DAVID?
+    <li>How many gene families in total were detected? What is the most enriched gene family (compare &ldquo;Genes from Input&rdquo; to &ldquo;Genes in Annotation&rdquo; ratios)? What is the gene family with the highest number of member genes present in your input gene list? List the gene symbols of the genes from your list that are in this gene family. How many genes in the annotation database belong to this gene family? 
+    <li>Does the phenotype information reinforce or contradict your guess about the most related human body part in the very last question about the DAVID results?
+    <li>Find KEGG pathways among the top 5 pathways. Were these KEGG pathways found as enriched in the DAVID results as well?
+    <li>What are the top 3 diseases most related to your gene list?
+  </ul>
+</ol>

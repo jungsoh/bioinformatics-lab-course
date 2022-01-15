@@ -1,0 +1,112 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 03</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 03&ensp;Multiple Sequence Alignment</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<p class="single">
+In your Linux home directory, make a new directory called <kbd>lab03</kbd>. Do all your work in this lab in <kbd>lab03</kbd>.
+
+<div id="uniprot" class="sectitle">Sequence retrieval from UniProt</div>
+<hr>
+<ol>
+  <li>From <a href="http://www.uniprot.org" target="_blank">UniProt</a>, search for &ldquo;alcohol dehydrogenase 1&rdquo; sequences in Swiss-Prot:
+  <ul class="level2">
+    <li>Enter &ldquo;alcohol dehydrogenase 1&rdquo; in the search box, including the quotes.
+    <li>Filter by &ldquo;Reviewed&rdquo; so that only entries from Swiss-Prot are listed. Show all entries on one page if possible.
+  </ul>
+  <li>Randomly choose 15 entries that start with &ldquo;ADH1_&rdquo;. 
+  <li>Download the selected sequences into a FASTA format, and save into a single file called <kbd>proteins.fasta</kbd> in your <kbd>lab03</kbd> directory.
+  </ul>
+</ol>
+
+<div id="clustalw" class="sectitle">Multiple sequence alignment using ClustalW</div>
+<hr>
+<ol>
+  <li>Go to <kbd>lab03</kbd> and run ClustalW 2.1 (command <kbd>clustalw2</kbd>). To interact with the program, type one of the possible keys listed and press Enter. Some keys trigger an additional question to which you can type an appropriate answer (and press Enter).
+  <li>Using ClustalW 2.1, perform a multiple sequence alignment of your downloaded sequences:
+  <ul class="level2">
+    <li>Set the input file name by pressing the appropriate key and entering <kbd>proteins.fasta</kbd>. Check that your 15 sequences are read in successfully.
+    <li>Go to the multiple alignment menu.
+    <li>Set your output format options so that only <em>MSF</em> and <em>Phylip</em> format outputs are &ldquo;ON&rdquo;, and all other formats are &ldquo;OFF&rdquo;. Press Enter to go back to the previous (multiple alignment) menu.
+    <li>Set your multiple alignment parameters so that the gap opening penalty becomes 25. Then go back to the multiple alignment menu.
+    <li>Do the (complete) multiple alignment (now).
+    <li>When asked for output file names, change the MSF format output file to <kbd>proteins.clustalw.msf</kbd>, and the Phylip format output file to <kbd>proteins.clustalw.phy</k>
+    <li>When asked, keep pressing Enter to continue, until you come back to the multiple alignment menu.
+    <li>Go back to the main menu and exit the program.
+  </ul>
+  <li>Check that your <kbd>lab03</kbd> directory contains <kbd>proteins.clustalw.msf</kbd> and <kbd>proteins.clustalw.phy</kbd> files. Those two files contain identical alignment results in two different formats. What do the two numbers on the first line of <kbd>proteins.clustalw.phy</kbd> indicate? Use the commands below to view the contents of the two files:
+<p>
+<table class="command"><tr><td><pre>
+less proteins.clustalw.phy
+less proteins.clustalw.msf
+</pre></table>
+</ol>
+
+<div id="tcoffee" class="sectitle">Multiple sequence alignment using <span class="nowrap">T-Coffee</span> command line</div>
+<hr>
+<ol>
+  <li><span class="nowrap">T-Coffee</span> attempts to improve ClustalW by combining the global pairwise alignment information with some local alignments. <span class="nowrap">T-Coffee</span>) does not have interactive menus like ClusalW. Open the <a href="http://www.tcoffee.org/Projects/tcoffee/documentation/t_coffee_technical.htm" target="_blank"><span class="nowrap">T-Coffee</span> Technical Documentation</a>, to find out how to specify the output file format and the output file name on the command line. Look in the &ldquo;Output Control&rdquo; section. What are the two options to indicate the format and the name, respectively?
+  <li>Run T-Coffee (command <kbd>t_coffee</kbd>) on your set of sequences in <kbd>proteins.fasta</kbd>, and save the output alignment file in your <kbd>lab03</kbd> directory in &ldquo;clustalw&rdquo; format, with the output file name of <kbd>proteins.tcoffee.aln</kbd>. The command line should look like (replace <kbd>OPTIONS</kbd> with the two options you found):
+<p>
+<table class="command"><tr><td><pre>
+t_coffee proteins.fasta OPTIONS
+</pre></table>
+  <li>Run T-Coffee again on the same set of sequences, but this time save the output alignment file in your <kbd>lab03</kbd> directory in &ldquo;phylip&rdquo; format, with the output file name of <kbd>proteins.tcoffee.phy</kbd>.
+  <li>Check that your <kbd>lab03</kbd> directory contains <kbd>proteins.tcoffee.aln</kbd> and <kbd>proteins.tcoffee.phy</kbd> files.
+</ol>
+ 
+<div id="mcoffee" class="sectitle">Multiple sequence alignment using <span class="nowrap">T-Coffee</span> Server</div>
+<hr>
+<ol>
+  <li>Go to the <a href=http://tcoffee.crg.cat target="_blank"><span class="nowrap">T-Coffee</span> Server</a>. Explore the choices to select <em>M-Coffee</em>, which will combine popular aligners. Check that you are on the M-Coffee page, where multiple alignment methods (including ClustalW and <span class="nowrap">T-Coffee</span>) are already selected.
+  <li>Upload your protein sequences in <kbd>proteins.fasta</kbd>, leave the alignment and output options at their defaults, and submit the sequences for alignment.
+   <li>When the alignment is finished (which takes a little while), download the alignment results in &ldquo;clustalw&rdquo; and &ldquo;phylip&rdquo; formats. Rename the downloaded alignment files with the commands below, to indicate the input sequences, alignment method, and file format:
+<p>
+<table class="command"><tr><td><pre>
+mv result.clustalw_aln proteins.mcoffee.aln
+mv result.phylip proteins.mcoffee.phy
+</pre></table>
+
+</ol>
+
+<div id="jalview" class="sectitle">Alignment visualization using Jalview</div>
+<hr>
+<ol>
+  <li>Run Jalview (command <kbd>jalview</kbd>). Close all the example view windows that pop up, so that you have only one blank window with a menu bar.
+  <li>Load the alignment file <kbd>proteins.mcoffee.aln</kbd> into Jalview, using &ldquo;File &#9656; Input Alignment &#9656; from File&rdquo;. Check that the file type is set to &ldquo;Clustal (.aln)&rdquo;
+  <li>If the alignment loading was successful, you should see a new window with the aligned sequences and three bar charts below them. Explore the &ldquo;Colour&rdquo; menu. The &ldquo;ClustalX&rdquo; coloring scheme is a common one, but you can use whatever you like.
+  <li>We want to investigate how the aligned sequences are related to each other. Click on the ID of the top sequence and drag the mouse down, to select all sequences. Selected sequence IDs will be indicated with gray background. Run &ldquo;Calculate &#9656; Principal Component Analysis&rdquo;, which shows the proximity/separation of the sequences based on the alignment result. This places the sequences in a three-dimensional space. Consult the built-in help for more details.
+  <li>In the &ldquo;Principal Component Analysis&rdquo; (PCA) window, display sequence IDs using &ldquo;View &#9656; Show Labels&rdquo;. Some sequences will almost overlap, while a few sequences are far from most other sequences. Click a mouse button and move it around to change the viewing angle. Use up and down arrow keys or the mouse wheel to change the zoom scale.
+  <li>We will build a tree based on the distances between sequences. Run &ldquo;Calculate &#9656; Calculate Tree &#9656; Neighbour Joining using % Identity&rdquo;. Consult the built-in help to learn about different types of trees Jalview can generate. These trees are clustering trees, which are different from the phylogenetic trees you will generate later.
+  <li>In the tree you just generated, the numbers indicate the distance from the previous branch point to the current node, which is also reflected by displayed edge lengths. Click the left mouse button anywhere within the tree window and note the vertical line that appears. Click on another spot and see how the coloring changes in the tree, in the alignment view window, and the PCA view. The different colors represent different clusters.
+  <li>Using these visualizations, answer these questions regarding the similarity of sequences.
+  <ul class="level2"> 
+     <li>How are the distances between sequences visualized in the PCA view?
+     <li>How can you calculate the distance between two sequences in the tree?
+     <li>How do you pick the two closest sequences based on the tree alone, and confirm your selection (visually) in the PCA view?
+     <li>Conversely, how can you guess the most outlying sequence based on the PCA view, and confirm your choice (numerically) using the tree?
+    </ul>
+  </ul>
+</ol>
+</div>

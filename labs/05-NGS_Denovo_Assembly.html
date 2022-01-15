@@ -1,0 +1,127 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 05</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 05&ensp;Next-Generation Sequencing <i>De Novo</i> Assembly</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<ol>
+  <li>In your Linux home directory, make a new directory called <kbd>lab05</kbd>. Do all your work in <kbd>lab05</kbd>.
+  <li>Copy the read files <kbd>/export/data/mol923/MIRA/Bac_S1_L001_R1_001.fastq</kbd> and <kbd>/export/data/mol923/MIRA/Bac_S1_L001_R2_001.fastq</kbd> to your <kbd>lab05</kbd> directory. These are Illumina MiSeq paired-end reads from a bacterial DNA sample named &ldquo;S1&rdquo;.
+  <li>Copy the MIRA configuration file <kbd>/export/data/mol923/MIRA/Bac_S1.manifest.conf</kbd> to your <kbd>lab05</kbd> directory. It contains settings to be applied when you assemble the reads with MIRA.
+  <li>Skip to Part 2.1 to run the MIRA assembly if you have not already done so, then start working on Part 1.
+</ol>
+
+<div id="input" class="sectitle">Read file check</div>
+<hr>
+<ol>
+  <li>Use the command <kbd>less</kbd> or <kbd>head</kbd> to view the contents of the read files <kbd>Bac_S1_L001_R1_001.fastq</kbd> and <kbd>Bac_S1_L001_R2_001.fastq</kbd>. Try finding a regular pattern occurring in the files, which tells you where a read starts and ends, or refer to <a href="https://en.wikipedia.org/wiki/FASTQ_format" target="_blank">FASTQ format</a>. Answer these questions:
+  <ul class="level2">
+    <li>What is the first character that indicates the beginning of a read ID?
+    <li>What is another single character that separates nucleotide characters and base quality characters in a read?
+    <li>How many lines of text represent one read?
+    <li>A pair of reads from paired-end sequencing have an identical read ID. How do you recognize the left read (R1) and right read (R2) of a pair from the first text line of a read?
+  </ul>
+  <li>Use the command <kbd>grep</kbd> on <kbd>Bac_S1_L001_R1_001.fastq</kbd> to catch a text pattern that occurs <em>only once</em> per read, and then count (with an appropriate option to <kbd>grep</kbd>) the total number of reads in this FASTQ file. How many reads in total do we have as input? Remember we have pairs of reads.
+</ol>
+
+
+<div id="assembly" class="sectitle"><i>De novo</i> assembly and assembly statistics</div>
+<hr>
+<ol>
+  <li>Make sure you are in <kbd>lab05</kbd>. Assemble the raw reads into contigs using the MIRA assembler, with this command:
+<p>
+<table class="command"><tr><td><pre>
+mira Bac_S1.manifest.conf > mira.log
+</pre></table>
+  <li>The assembly will take about 5 minutes. During this time, the terminal will seem frozen, but MIRA is running, so leave the terminal alone. You can open another terminal to do other things while you wait. When the assembly finishes, <kbd>mira.log</kbd> will contain the messages produced by MIRA while it ran. 
+  <li>If MIRA ran successfully, the <kbd>S1_assembly</kbd> directory would be there, with four subdirectories: 
+<p>
+<table class="tree"><tr><td><pre style="margin:0.5em;line-height: 60%">
+                 S1_assembly
+
+                      |
+    &horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;
+    |           |           |           |
+
+S1_d_chkpt  S1_d_info  S1_d_results  S1_d_tmp
+</pre></table>
+  <li>Go to <kbd>S1_d_info</kbd>, which contains information about the assembly. Find a file there that provides information about the assembly. View the contents of this file to answer these questions:
+  <ul class="level2">
+    <li>How many reads were assembled?
+    <li>What percentage of the raw input reads were assembled?
+    <li>How many contigs were generated in total?
+    <li>Considering all contigs, what is the maximum contig size?
+    <li>Considering all contigs, what is the assembly size (total number of bases in assembly)?
+    <li>Considering all contigs, what is N50?
+  </ul>
+</ol>
+
+<div id="contigs" class="sectitle">Contig types</div>
+<hr>
+<ol>
+  <li>Go to <kbd>S1_d_results</kbd> and view the contents of <kbd>S1_out.unpadded.fasta</kbd>, which is a multiple FASTA file of the assembled contigs. Use <kbd>grep</kbd> to extract the sequene headers and find the number of contigs. Is the number same as what you have found as the number of contigs in the assembly information file? 
+  <li>Use the <kbd>grep</kbd> command again to examine the sequence names of <kbd>S1_out.unpadded.fasta</kbd>. Using the contig names, answer these questions:
+  <ul class="level2">
+  <li>How many different <em>types</em> of contig names can you find? 
+  <li>Describe the types of contigs you found. Look for accurate information regarding &ldquo;contig naming&rdquo; in the <a href="http://mira-assembler.sourceforge.net/docs/DefinitiveGuideToMIRA.html#chap_reference" target="_blank">MIRA reference manual</a>.
+  <li>How many contigs do you have for each contig type? Use <kbd>grep</kbd> again.
+</ol>
+
+<div id="reads2contig" class="sectitle">Contig statistics and read utilization</div>
+<hr>
+<ol>
+  <li>Go back to the directory <kbd>S1_d_info</kbd>, and find a file that provides statistical information about the contigs. Using this file, answer these questions for the first contig <em>and</em> for the last contig of the assembly:
+  <ul class="level2">
+    <li>What is the contig length?
+    <li>How many reads were assembled into the contig?
+    <li>What is the GC percentage of the contig?
+  </ul>
+  <li>Not all reads are assembled into a contig. Find a file that lists the reads not assembled into any contig and the reasons. Use this file and the command below to find out 
+how many reads were not assembled (replace <kbd>FILE</kbd> with the actual file you<Up> found):
+<p>
+<table class="command"><tr><td><pre>
+wc -l FILE
+</pre></table>
+</ol>
+
+<div id="viz" class="sectitle">Assembly visualization</div>
+<hr>
+<ol>
+  <li>To visualize and get more information on the assembly, converting the assembly result format is necessary. In <kbd>S1_d_results</kbd>, convert the complete assembly result file from MAF format to  SAM format with this command:
+<p>
+<table class="command"><tr><td><pre>
+miraconvert -f maf -t sam S1_out.maf S1_out.sam
+</pre></table>
+  <li>Open Tablet (command <kbd>tablet</kbd>). In &ldquo;Open Assembly&rdquo;, select <kbd>S1_out.sam</kbd> as the &ldquo;Primary assembly file&rdquo;, select <kbd>S1_out.padded.fasta</kbd> as the &ldquo;Reference/consensus file&rdquo;, and open the files.
+  <li>Once the files are loaded, locate the left panel listing the contigs. Using this panel, answer these questions:
+  <ul class="level2">
+    <li>Display &ldquo;Assembly Summary&rdquo; (figure out how). What are additional statistical numbers, except file sizes, which are not provided by MIRA? List their values.
+    <li>How many contigs have more than 20 reads? Use &ldquo;Filter by&rdquo;.
+    <li>How many contigs are shorter than 1000 bp?
+  </ul>
+  <li>The main panel on the right shows the (dark blue) coverage plot when a contig is selected, which indicates how many read bases are assembled onto a contig base. Answer these questions regarding all contigs:
+  <ul class="level2">
+    <li>Find the contig with the highest number of reads. How many reads were assembled into this contig? What is the maximum coverage depth of this contig? What is the average coverage depth of this contig?
+    <li>Answer the same three questions for the shortest contig.
+  </ul>
+</ol>

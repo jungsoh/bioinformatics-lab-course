@@ -1,0 +1,145 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 02</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 02&ensp;Sequence Retrieval and Database Searches</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<p class="single">
+In your Linux home directory, make a new directory called <kbd>lab02</kbd>. 
+
+<div id="entrez" class="sectitle">NCBI Entrez query</div>
+<hr>
+<ol>
+  <li><a href="http://www.ncbi.nlm.nih.gov/gquery" target="_blank">NCBI Entrez</a> is a portal to search NCBI databases. Starting from the portal, your task is to construct a query to retrieve all proteins that satisfy both of the following conditions: 
+  <ul class="level2">
+    <li>Have a protein name &ldquo;alcohol dehydrogenase 1&rdquo;.
+    <li>Come from either Rodents or Birds, but excluding the Mouse (<i>Mus musculus</i>) and all Rat species.
+  </ul>
+  <li>On the Entrez main page, select an appropriate database to search against.
+  <li>On the selected database page, click &ldquo;Advanced&rdquo; to start building the query.
+  <li>Under &ldquo;Builder&rdquo;, specify your search conditions one by one. First pick an appropriate &ldquo;Field&rdquo; for the search, then enter the desired query term. Watch how the query string above Builder changes as you do. If the query was done correctly, about 200 proteins would be retrieved. Some tips: 
+  <ul class="level2">
+    <li>You have four search conditions to enter.
+    <li>You need to select one of AND, OR, and NOT when adding a search condition.
+    <li>Use &ldquo;OR&rdquo; to indicate alternatives within a query term.
+    <li>Organism names can be entered as common names, but using formal taxonomy terms will produce more accurate results. Use <a href="http://www.ncbi.nlm.nih.gov/Taxonomy" target="_blank">NCBI Taxonomy</a> to find Latin taxonomy terms for common names like birds. 
+  </ul>
+  <li>How many entries are retrieved from the search? What is the most frequent protein length among the top 20 retrieved sequences?
+</ol>
+
+<div id="webblast" class="sectitle">NCBI Web BLAST</div>
+<hr>
+<ol>
+  <li>Go to <a href="https://www.ncbi.nlm.nih.gov/blast" target="_blank">NCBI BLAST</a>. Run nucleotide-nucleotide BLAST:
+  <ul class="level2">
+    <li>Use the &ldquo;Mystery_cDNA_sequence&rdquo; below as your query.
+    <li>Use &ldquo;Nucleotide collection (nr/nt)&rdquo; as your database.
+    <li>Keep default parameters and settings, check &ldquo;Show results in a new window&rdquo;, and press &ldquo;BLAST&rdquo;.
+  </ul>
+<table class="command"><tr><td><pre>
+>Mystery_cDNA_sequence
+tcatcatgaccgtgggctgtgtggccggtgacgaggagtcctaccaggtgttcaaggatc
+tcttcgaccccatcatccaggaccggcatgggggttacaaacccaccgacaagcacaaga
+ctgacctcaaccatgagaacctcaagggtggagacgacctagaccccaactatgtgctca
+gcagccgcgtccgcacgggccgtagcatcaagggctacacactgcccccccactgctccc
+ctgacctcaaccatgagaacctcaagggtggagacgacctagaccccaactatgtgctca
+gcagccgcgtccgcacgggccgtagcatcaagggctacacactgcccccccactgctccc
+ggggcgagcgccgggcagtggagaaactctccatagaagccctcaacagcctgacaggcg
+agttcaaggggaaatactaccctctgaagagcatgaccgagcaggagcagcagcagctca
+ggggcgagcgccgggcagtggagaaactctccatagaagccctcaacagcctgacaggcg
+agttcaaggggaaatactaccctctgaagagcatgaccgagcaggagcagcagcagctca
+ctgacctcaaccatgagaacctcaagggtggagacgacctagaccccaactatgtgctca
+gcagccgcgtccgcacgggccgtagcatcaagggctacacactgcccccccactgctccc
+ggggcgagcgccgggcagtggagaaactctccatagaagccctcaacagcctgacaggcg
+agttcaaggggaaatactaccctctgaagagcatgaccgagcaggagcagcagcagctca
+tcgacgatcacttcctgttcgacaaacccgtgtccccactgctgctggcctcaggcatgg
+acaccccttcatgtggaacgagcacctgggctacgtgctcacctgcccatccaacctggg
+caccgggctgcgtggaggtgtgcacgtcaagctggcgcacctgagcaagcaccccaagtt
+cgaggagatcctcacccgtctgcgcctgcagaagcggggcacaggtggtgtggacacagc
+tgctgtgggctcagtgttcgacatatccaacgccgatcgactgggctcatccgaagtaga
+acaggtgcagctggtggtggacggtgtgaagctcatggtggagatggagaagaagctgg
+</pre></table>
+  <br>
+  <li>Once the results are available, answer these questions:
+  <ul class="level2">
+    <li>How many hits were found in total?
+    <li>Based on &ldquo;[Taxonomy reports]&rdquo;, what are the top two organisms this sequence is most likely from?
+    <li>What is the likely function of this gene?
+  </ul>
+</ol>
+
+<div id="wordsize" class="sectitle">BLAST word size</div>
+<hr>
+<ol>
+  <li>Go back to the main nucleotide BLAST page. Click &ldquo;Algorithm parameters&rdquo; to show the BLAST parameters. Read the help information on &ldquo;Word size&rdquo;.
+  <li>Try increasing the word size from the default and run the BLAST again. Do you observe any effects on the BLAST result? What if you decrease the word size from the default?
+  <li>What are the general effects of the word size parameter in BLAST?
+</ol>
+
+<div id="localblast" class="sectitle">Local BLAST</div>
+<hr>
+<ol>
+  <li>Save &ldquo;Mystery_cDNA_sequence&rdquo; into a <em>text</em> file called <kbd>mystery.fasta</kbd> in your <kbd>lab02</kbd> directory. Then go to <kbd>lab02</kbd>.
+  <li>Search protein translations of this sequence against Swiss-Prot proteins, using local BLAST programs and the Swiss-Prot database. In the <kbd>lab02</kbd> directory, run the <kbd>blastx</kbd> (translated nucleotide to protein BLAST) program with this command:
+<p>
+<table class="command"><tr><td><pre>
+blastx -query mystery.fasta -db swissprot > blastx.txt
+</pre></table>
+  <li>When the command finishes, the BLAST results will be in the <kbd>blastx.txt</kbd> file. Use the command <kbd>less&nbsp;blastx.txt</kbd> to view its contents (Space for next screen, <kbd>b</kbd> to go backward, <kbd>q</kbd> to quit), and answer these questions:
+  <ul class="level2">
+    <li>What is the UniProt ID of the top hit?
+    <li>Search for the ID in <a href="http://www.uniprot.org" target="_blank">UniProt</a>. Which organism is this top-hit protein from? 
+    <li>Look in &ldquo;Cross-references&rdquo; to find the NCBI RefSeq ID (or IDs) of this protein. Was this protein also reported as one of the top few hits in the previous NCBI Web BLAST?
+    <li>In conclusion, is this local BLAST result similar to the NCBI Web BLAST result?
+  </ul>
+</ol>
+
+<div id="uniprotsimple" class="sectitle">Simple query of UniProt</div>
+<hr>
+<ol>
+  <li>Go to <a href="http://www.uniprot.org" target="_blank">UniProt</a>. What is the quickest way to search for proteins with the word &ldquo;kinase&rdquo; somewhere in its record from UniProtKB? How many entries are returned?
+  <li>Using the filters available under &ldquo;Filter by&rdquo;, filter the search result to list only those entries from human and with the term &ldquo;kinase&rdquo; in the &ldquo;protein name&rdquo;. How many entries do you have now?
+  <li>UniProtKB consists of both manually reviewed (Swiss-Prot) and unreviewed (TrEMBL) entries. How many reviewed entries were returned after the filtering?
+</ol>
+
+
+<div id="uniprotadvanced" class="sectitle">Advanced query of UniProt</div>
+<hr>
+<ol>
+  <li>In UniProt, click &ldquo;Advanced&rdquo; (and consult Help) to enter multiple search terms. Retrieve a set of about 100 proteins related to tumor, which satisfy the following conditions:
+  <ul class="level2">
+    <li>In Swiss-Prot
+    <li>From a human genome
+    <li>Has &ldquo;tumor&rdquo; somewhere in the text
+    <li>Between 300 and 400 AA long
+    <li>Involved in a disease
+  </ul>
+  <li>UniRef90 is a database built by clustering sequences with at least 90% identity. From your query results, view UniRef90 clusters to which the retrieved sequences belong, and answer these questions:
+  <ul class="level2">
+    <li>How many UniRef90 clusters are listed? 
+    <li>What is the ID of the largest cluster? What is its size?
+    <li>How many members does the smallest cluster have? How many organisms are represented in it?
+  </ul>
+</ol>
+
+</div>

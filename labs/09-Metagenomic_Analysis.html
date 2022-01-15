@@ -1,0 +1,116 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 09</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 09&ensp;Metagenomic Analysis</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<ol>
+  <li>On your Linux home directory, make a new directory called <kbd>lab09</kbd>.
+  <li>Copy <kbd>/export/data/mol923/Kaiju/kaiju.txt</kbd> to your <kbd>lab09</kbd> directory. This is the output file from running the <a href="https://github.com/bioinformatics-centre/kaiju" target="_blank">Kaiju taxonomic classification tool</a> (what is <a href="https://en.wikipedia.org/wiki/Kaiju" target="_blank">kaiju</a>?) on a set of 10000 contigs assembled by the <a href="https://www.ebi.ac.uk/~zerbino/velvet" target="_blank">Velvet assembler</a> using metagenomic reads.
+  <li>Copy the 3 script files in <kbd>/export/data/mol923/Kaiju</kbd> to your <kbd>lab09</kbd> directory using the command below (make sure you are in <kbd>lab09</kbd>). After copying, check that you have <kbd>add_taxon_names.sh</kbd>, <kbd>summarize_genera.sh</kbd> and <kbd>make_krona_html.sh</kbd> in <kbd>lab09</kbd>.
+<p>
+<table class="command"><tr><td><pre>
+cp /export/data/mol923/Kaiju/*.sh .
+</pre></table>
+  <li>Copy <kbd>/export/data/mol923/MEGAN/run_megan</kbd> to your <kbd>lab09</kbd> directory.
+</ol>
+
+<div id="tax" class="sectitle">Taxonomic classification of contigs</div>
+<hr>
+<ol>
+  <li>The Kaiju output file has the detailed taxonomic classification results for all 10000 contigs, one line per contig. Refer to the <a href="https://github.com/bioinformatics-centre/kaiju/#output-format">Kaiju output format</a>, and use the <kbd>grep</kbd> command on <kbd>kaiju.txt</kbd> to find how many contigs are classified.
+  <li>The Kaiju output lists NCBI taxon IDs, but not taxon names. Use the command below to add taxon names for all classified contigs, and use the <kbd>grep</kbd> command on <kbd>kaiju.names.txt</kbd> to find how many contigs are assigned to Bacteria:
+<p>
+<table class="command"><tr><td><pre>
+./add_taxon_names.sh
+</pre></table>
+  <li>Kaiju can generate a summary report for a given taxonomic rank. Use the command below to summarize genus information into the <kbd>kaiju.genus.txt</kbd> file. List the genera (just the genus names, not the full taxon path) that comprise at least 1 % of the input contigs (reads). What percentage of the input contigs were classified only to a higher-level taxonomic rank than genus (go to the bottom of the file to find this percentage, but ignore ones classified into viruses)?
+<p>
+<table class="command"><tr><td><pre>
+./summarize_genera.sh
+</pre></table>
+  <li><a href="https://github.com/marbl/Krona/wiki" target="_blank">Krona</a> is a visualization tool to explore hierarchical data, like taxonomic classification data. Use the command below to convert the Kaiju output to Krona format and create an HTML file to visualize:
+<p>
+<table class="command"><tr><td><pre>
+./make_krona_html.sh
+</pre></table>
+  <li>Load the <kbd>kaiju.krona.html</kbd> file in your Web browser. Use the command <kbd>chromium-browser kaiju.krona.html</kbd> if you are using Chromium, and use <kbd>firefox kaiju.krona.html</kbd> if you are using Firefox. Double clicking on a highlighted taxon or a small pie chart changes the display. You can also search for a taxon. Explore the display to answer these questions:
+  <ul class="level2">
+    <li>How many contigs are assigned to &ldquo;Rhizobiales&rdquo;? What percentage of these are <em>not</em> assigned into a lower-rank taxon?
+    <li>Zoom on the family &ldquo;Rhizobiaceae&rdquo;. What percentage of Bacteria, Proteobacteria, Alphaproteobacteria, and Rhizobiales belong to this family (4 percentage numbers as shown on the small pie charts)?
+  </ul>
+
+</ol>
+
+<div id="func" class="sectitle">Functional analysis of bacterial contigs</div>
+<hr>
+<ol>
+  <li>Launch MEGAN with the command below. The <kbd>&</kbd> at the end puts your program in the &lsquo;background&rsquo; mode, so you can use the terminal again. It will take a (possibly long) while to load the pre-built data.
+<p>
+<table class="command"><tr><td><pre>
+./run_megan &
+</pre></table>
+  <li>Use &ldquo;File &#9656 Open&rdquo; to load the <kbd>/export/data/mol923/MEGAN/blastx.Bacteria.rma6</kbd> file. This is a MEGAN6 format file built using the BLAST output from running blastx of bacterial contigs (as obtained from Step 1.2) against the NCBI nr database. 
+  <li>Open &ldquo;Window &#9656; Open SEED Viewer&rdquo;. The tree shows the mapping of the contigs to <a href="http://www.theseed.org" target="_blank">SEED</a> functions. Initially only the top-level functions are shown. How many contigs (reads) were mapped (assigned) to a SEED function?
+  <li>Turn on &ldquo;Tree &#9656; Show Number of Reads Summarized&rdquo; to see the abundance counts. What is the most abundant top-level functional term?
+  <li>Display a bar chart to compare the numbers of contigs assigned to different functional terms. Sort the bars by selecting an appropriate tab and sorting order. Use the sorted bar chart to find the 4 most abundant functional terms. Turning on &ldquo;Layout &#9656; Show Values&rdquo; to show the actual counts on the chart will help but is not required.
+  <li>Go back to the main SEED viewer. Select &ldquo;Amino Acids and Derivatives&rdquo; and right click to select &ldquo;Extract Reads...&rdquo; (with &ldquo;Include Summarized Reads&rdquo; on). This extracts the headers of the contigs that maps to the function. By default, the file of extracted contig sequence headers is named <kbd>reads-Amino_Acids_and_Derivatives.fasta</kbd> in your home directory (no need to change the file name yourself). Move this file to your <kbd>lab09</kbd> directory. Repeat the same procedure for the function &ldquo;Stress Response&rdquo;.
+  <li>Remove the <kbd>></kbd> from the sequence headers to keep only the contig IDs, in preparation for the next part. In <kbd>lab09</kbd>, run these commands to remove the first character from every line of the files and save the output in new files:
+<p>
+<table class="command"><tr><td><pre>
+cut -c2- reads-Amino_Acids_and_Derivatives.fasta > ids.Amino_Acids_and_Derivatives.txt
+cut -c2- reads-Stress_Response.fasta > ids.Stress_Response.txt
+</pre></table>
+</ol>
+
+
+<div id="tax_func" class="sectitle">Taxon-specific functional analysis</div>
+<hr>
+<ol>
+  <li>We now compare the functions of the bacterial orders Rhizobiales and Sphingomonadales. In <kbd>lab09</kbd>, extract the IDs of contigs assigned to these two orders from the Kaiju output with taxon names:
+<p>
+<table class="command"><tr><td><pre>
+grep Rhizobiales kaiju.names.txt | cut -f2 > ids.Rhizobiales.txt
+grep Sphingomonadales kaiju.names.txt | cut -f2 > ids.Sphingomonadales.txt
+</pre></table>
+  <li>We are interested only in the &ldquo;Amino Acids and Derivatives&rdquo; and &ldquo;Stress Response&rdquo; functions, for which we already extracted the contig IDs and saved them in <kbd>ids.Amino_Acids_and_Derivatives.txt</kbd> and <kbd>ids.Stress_Response.txt</kbd>. Check that you now have in your <kbd>lab09</kbd> directory the four files starting with <kbd>ids.</kbd>.
+  <li>We first want to see how many contigs in Rhizobiales are involved in the &ldquo;Amino Acids and Derivatives&rdquo; functions. You can obtain this number by counting how many contig IDs appear in <em>both</em> <kbd>ids.Rhizobiales.txt</kbd> and <kbd>ids.Amino_Acids_and_Derivatives.txt</kbd>, with the command below:
+<p>
+<table class="command"><tr><td><pre>
+cat ids.Rhizobiales.txt ids.Amino_Acids_and_Derivatives.txt | sort | uniq -c | grep -c "2 "
+</pre></table>
+  <li>Repeat the above command, with the two ID files replaced appropriately, to obtain these counts:
+  <ul class="level2">
+    <li>Number of Rhizobiales contigs involved in &ldquo;Stress Response&rdquo; function
+    <li>Number of Sphingomonadales contigs involved in &ldquo;Amino Acids and Derivatives&rdquo;
+    <li>Number of Sphingomonadales contigs involved in &ldquo;Stress Response&rdquo;
+  </ul>
+  <li>Using the four counts you have obtained and the numbers of contig IDs in <kbd>ids.Rhizobiales.txt</kbd> and <kbd>ids.Sphingomonadales.txt</kbd>, calculate these percentages:
+  <ul class="level2">
+    <li>Percentage of Rhizobiales contigs involved in &ldquo;Amino Acids and Derivatives&rdquo;
+    <li>Percentage of Rhizobiales contigs involved in &ldquo;Stress Response&rdquo;
+    <li>Percentage of Sphingomonadales contigs involved in &ldquo;Amino Acids and Derivatives&rdquo;
+    <li>Percentage of Sphingomonadales contigs involved in &ldquo;Stress Response&rdquo;
+  </ul>
+  <li>Based on the percentages just calculated, which order is more active in the &ldquo;Amino Acids and Derivatives&rdquo; function? Which order is more active in the &ldquo;Stress Response&rdquo; function?
+</ol>

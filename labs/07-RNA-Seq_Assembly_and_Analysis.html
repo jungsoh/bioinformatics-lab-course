@@ -1,0 +1,143 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 07</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 07&ensp;RNA-Seq Assembly and Analysis</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<ol>
+  <li>In your Linux home directory, make a new directory called <kbd>lab07</kbd>. Do all your work in <kbd>lab07</kbd>.
+  <li>Copy <kbd>/export/data/mol923/Trinity/samples.txt</kbd> to your <kbd>lab07</kbd> directory. This file indicates which samples are from which condition.
+  <li>Copy all files in the <kbd>/export/data/mol923/Trinity/scripts</kbd> directory to your <kbd>lab07</kbd> directory. These are shell script files and they all start with <kbd>run_</kbd>. Therefore, you can copy them all at once with this command (make sure you are in <kbd>lab07</kbd>):
+<p>
+<table class="command"><tr><td><pre>
+cp /export/data/mol923/Trinity/scripts/run_* .
+</pre></table>
+  <li>Make a directory called <kbd>assembly</kbd> under <kbd>lab07</kbd>. Copy <kbd>/export/data/mol923/Trinity/Trinity.fasta</kbd> to the <kbd>assembly</kbd> directory. This is the transcriptome assembly produced by Trinity, which contains transcripts (contigs) assembled from Illumina paired-end RNA-seq read files.
+  <li><a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki" target="_blank">Trinity RNA-Seq</a> contains useful information, which can be directly relevant to some questions.
+</ol>
+
+<div id="assembly" class="sectitle">Transcriptome assembly check</div>
+<hr>
+<ol>
+  <li>Go to the <kbd>assembly</kbd> directory. Calculate some statistics about the transcriptome assembly in <kbd>Trinity.fasta</kbd> and save it into a file with this command:
+<p>
+<table class="command"><tr><td><pre>
+/export/programs/trinity/util/TrinityStats.pl Trinity.fasta > assembly_stats.txt
+</pre></table>
+  <li>Trinity produces both transcripts (also called isoforms) and &lsquo;genes&rsquo;. A gene in Trinity is simply a group of very similar transcripts. Most genes have a single transcript. Look in the <kbd>assembly_stats.txt</kbd> file to answer these questions:
+  <ul class="level2">
+    <li>How many genes and transcripts are there in the assembly?
+    <li>For every statistic, the value based on &ldquo;ONLY LONGEST ISOFORM per 'GENE'&rdquo; is smaller than that based on &ldquo;ALL transcript contigs&rdquo;. Why is this? Refer to <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Transcriptome-Contig-Nx-and-ExN50-stats" target="_blank">Trinity Transcriptome Contig Nx and ExNy Statistics</a>.
+  <li>Which set of statistics is better, and why?
+</ol>
+
+<div id="abund" class="sectitle">Transcript abundance estimation</div>
+<hr>
+<ol>
+  <li>We have four samples: <kbd>Dry1, Dry2, Wet1, Wet2</kbd>. Samples <kbd>Dry1</kbd> and <kbd>Dry2</kbd> are biological replicates from a dry condition, while samples <kbd>Wet1</kbd> and <kbd>Wet2</kbd> are biological replicates from a wet condition. We now estimate the abundance of transcripts for each replicate sample separately.  <li>In <kbd>lab07</kbd>, run the command below that will build a Bowtie2 index from the transcriptome assembly. Make sure it runs without an error, until you see the &ldquo;Only prepping reference. Stopping now.&rdquo; message at the end.
+<p>
+<table class="command"><tr><td><pre>
+./run_prep_ref
+</pre></table>
+  <li>In <kbd>lab07</kbd>, run the command below that will estimate transcript abundance by using Bowtie2 to align the reads of each replicate to the transcripts. This command will be silent and can take 5 to 10 minutes to finish.
+<p>
+<table class="command"><tr><td><pre>
+./run_est_trans_abund
+</pre></table>
+  <li>Look in <kbd>trans_abund.log</kbd> to find, for each replicate, the overall rate of alignment to the transcriptome. This file has four sections, each of which contains messages output while estimating transcript abundance for a sample. Each section starts with &ldquo;-> Estimating transcript abundance for sample ...&rdquo;. If you are using <kbd>less</kbd> to view the file, you can search for "Estimating" by typing <kbd>/Estimating</kbd>, and look for the alignment rate information (as output by Bowtie 2) for that sample.
+  <li>Check that there are four subdirectories corresponding to each replicate under the <kbd>trans_abund</kbd> directory. In <kbd>lab07</kbd>, run the command below to collect the abundance estimates for all replicates into a single matrix.
+<p>
+<table class="command"><tr><td><pre>
+./run_abund_to_matrix
+</pre></table>
+
+</ol>
+
+<div id="DE" class="sectitle">Differential expression analysis</div>
+<hr>
+ 
+<ol>
+  <li>In <kbd>lab07</kbd>, run the command below to compare the transcript abundance estimates and perform differential expression (DE) analysis.
+<p>
+<table class="command"><tr><td><pre>
+./run_DE_analysis
+</pre></table>
+  <li>Go to the <kbd>diff_expr</kbd> directory, and view the contents of the <kbd>trans.counts.matrix.Dry_vs_Wet.edgeR.DE_results</kbd> file. This file contains the main results of the DE analysis, where the expression levels under the dry condition are compared to those under the wet condition. Answer these questions using this file:
+  <ul class="level2">
+    <li>For how many transcripts was it possible to produce fold change values and associated statistics?
+    <li>What is the maximum log fold change (FC) and minimum log FC? You can use the <kbd>sort</kbd> command, with the &ldquo;logFC&rdquo; column (column 4, not column 3 as the heading is missing the first column name!) as the numeric sort key, with the output piped to <kbd>less</kbd> as below. You can type <kbd>G</kbd> and <kbd>g</kbd> to go to the bottom and to the top of the file, respectively.
+<p>
+<table class="command"><tr><td><pre>
+sort -nk4 trans.counts.matrix.Dry_vs_Wet.edgeR.DE_results | less -S
+</pre></table>
+</ol>
+
+<div id="DEtrans" class="sectitle">Extraction of differentially expressed transcripts</div>
+<hr>
+
+<ol>
+  <li>We now  want to extract the transcripts that are <em>significantly</em> differentially expressed between the two conditions. In <kbd>lab07</kbd>, run this command to extract those transcripts that are at least 2-fold differentially expressed with a FDR (false discovery rate) less than 0.25:
+<p>
+<table class="command"><tr><td><pre>
+./run_ext_DE_trans
+</pre></table>
+  <li>In the <kbd>diff_expr</kbd> directory, find two DE results <em>subset</em> files listing the transcripts that are up-regulated in the dry and wet conditions, respectively. Using <kbd>sort</kbd> with the output piped to <kbd>less -S</kbd>, answer these questions:
+  <ul class="level2">
+    <li>How many transcripts are up-regulated in the dry condition? Of these transcripts, how many transcripts have a logFC value greater than 10? List the values (rounded to 2 significant digits below decimal point).
+    <li>How many transcripts are up-regulated in the wet condition? Of these transcripts, how any transcripts have a logFC value less than -6? List the values (rounded to 2 significant digits below decimal point).
+  </ul>
+  <li>View the plot of expression levels of DE transcripts in the samples with the command below. Does this plot agree (qualitatively, visually) with the relative amounts of up-regulated transcripts in each condition, which you just found?
+<p>
+<table class="command"><tr><td><pre>
+evince diffExpr.P0.25_C1.matrix.log2.centered.genes_vs_samples_heatmap.pdf
+</pre></table>
+</table>
+  <li>Each condition (dry and wet) has two replicate samples. View how the replicates are correlated, based on the extracted DE transcripts, with the command below. In an <em>ideal</em> experiment, how should the colors look like in the correlation plot? Which condition (dry or wet) has better replicates, and why?
+<p>
+<table class="command"><tr><td><pre>
+evince diffExpr.P0.25_C1.matrix.log2.sample_cor_matrix.pdf
+</pre></table>
+</ol>
+
+<div id="cluster" class="sectitle">Clustering of differentially expressed transcripts</div>
+<hr>
+<ol>
+  <li>We now want to see how the DE transcripts cluster together, based on patterns of expression levels. We can cut the previous clustering tree in <kbd>diffExpr.P0.25_C1.matrix.log2.centered.genes_vs_samples_heatmap.pdf</kbd> at a certain percentage of the tree height. In <kbd>lab07</kbd>, run the command below, which cuts the tree at 40% of its height to generate a set of clusters:
+<p>
+<table class="command"><tr><td><pre>
+./run_cluster_DE_trans
+</pre></table>
+</table>
+  <li>Go to the <kbd>diff_expr/diffExpr.P0.25_C1.matrix.RData.clusters_fixed_P_40</kbd> directory. View the cluster plots with this command:
+<p>
+<table class="command"><tr><td><pre>
+evince my_cluster_plots.pdf
+</pre></table>
+</table>
+  <li>Each plot represents a cluster, where a gray line connects expression levels of a transcript in the cluster over the samples. The blue dots and the connecting line show the centroids (averages) of the transcript abundance over all transcripts in the cluster. Examine these plots to answer these questions:
+  <ul class="level2">
+    <li>How many clusters were formed, and how many transcripts were put into each cluster?
+    <li>The plotted values represent relative levels of transcript expression in the samples. Describe (qualitatively) the characteristics of the two largest clusters.
+    <li>Earlier we have visualized replicate corrleations to compare the replicate qualities between the dry and wet conditions. Do you find a cluster that confirms your comparison result?
+</ol>
+

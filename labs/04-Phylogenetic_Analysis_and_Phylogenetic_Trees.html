@@ -1,0 +1,182 @@
+<html>
+
+<head>
+
+<title>MOL.923 Lab 04</title>
+<link rel="stylesheet" type="text/css" href="mol923.css">
+<link rel="stylesheet" type="text/css" href="sidenav.css">
+<script type="text/javascript" src="sidenav.js"></script>
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+</div>
+
+<div id="main">
+
+<div class="labtitle">Lab 04&ensp;Phylogenetic Analysis and Phylogenetic Trees</div>
+<div class="subtitle">MOL.923&ensp;Computerlabor Bioinformatik (SS 2018)</div>
+
+<span id="contents" onclick="openNav()">
+<span style="font-size:125%">&#9776;</span>&ensp;Contents
+</span>
+
+<div class="usectitle">Setup</div>
+<hr>
+<ol> 
+  <li>In your Linux home directory, make a new directory called <kbd>lab04</kbd>. Durng this lab, you will create subdirectories under <kbd>lab04</kbd>, with this final directory structure:
+<p>
+<table class="tree"><tr><td><pre style="margin:0.5em;line-height: 60%">
+                 lab04
+
+                   | 
+ &horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;&horbar;
+ |        |       |        |       |
+
+dist  boot-dist  pars  boot-pars  viz
+</pre></table>
+  <li>All your phylogenetic trees will be built on the M-Coffee alignment file <kbd>proteins.mcofee.phy</kbd>, which should be in your <kbd>lab03</kbd> directory.
+  <li>PHYLIP commands expect an input file <kbd>infile</kbd> (except <kbd>consense</kbd>, which expects <kbd>intree</kbd>), and create <kbd>outfile</kbd> and possibly <kbd>outtree</kbd>. So, before running a PHYLIP command, remember to rename the output of the previous PHYLIP command as the input of the next command, using the <kbd>mv</kbd> command:
+<p>
+<table class="command"><tr><td><pre>
+mv outfile infile
+</pre></table>
+  <li>When a program asks for a random seed, use any odd number.
+</ol>
+
+<div id="dist" class="sectitle">Distance method tree</div>
+<hr>
+<ol>
+  <li>In the <kbd>lab04</kbd> directory, make a subdirectory <kbd>dist</kbd> (command <kbd>mkdir dist</kbd>).
+  <li>Copy your Phylip format M-Coffee alignment file from the <kbd>lab03</kbd> directory to the <kbd>dist</kbd> directory and also rename it <kbd>infile</kbd>.
+  <li>Go to the <kbd>dist</kbd> directory (command <kbd>cd dist</kbd>) and check that <kbd>infile</kbd> is there (command <kbd>ls</kbd>).
+  <li>The data flow will look like:
+    <div class="flow">
+    <kbd>infile</kbd>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">protdist</span>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><span class="big"> = </span><kbd>infile</kbd>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">fitch</span>
+    <span class="multi"><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><br><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outtree</kbd>
+    </div>
+  <li>Run <kbd>protdist</kbd> with the &ldquo;Jones-Taylor-Thornton (JTT)&rdquo; model to create the distance matrix. Rename <kbd>outfile</kbd> to <kbd>infile</kbd>.
+  <li>Run <kbd>fitch</kbd> with parameters &ldquo;G=yes&rdquo; and &ldquo;J=yes&rdquo; to build trees. When asked how many times to jumble, enter 100.
+  <li>Check that <kbd>outfile</kbd> contains a text-based tree figure showing the 15 sequences as leaves (command <kbd>less outfile</kbd>). This file is for human reading.
+  <li>Check that <kbd>outtree</kbd> contains a <a href="http://evolution.genetics.washington.edu/phylip/newicktree.html" target="_blank">Newick tree format</a> file to represent the identical tree. This file is to be read by computers.
+</ol>
+
+<div id="bootdist" class="sectitle">Bootstrapped distance method tree</div>
+<hr>
+<ol>
+  <li>Go back to the <kbd>lab04</kbd> directory (command <kbd>cd ..</kbd>), then make a subdirectory <kbd>boot-dist</kbd>.
+  <li>Copy your Phylip format M-Coffee alignment file from the <kbd>lab03</kbd> directory to the <kbd>boot-dist</kbd> directory and rename it <kbd>infile</kbd>.
+  <li>Go to the <kbd>boot-dist</kbd> directory and check that <kbd>infile</kbd> is there.
+  <li>Refer to the data flow below, and remember to rename <kbd>outfile</kbd> to <kbd>infile</kbd>, or <kbd>outtree</kbd> to <kbd>intree</kbd> before running the next command:
+    <div class="flow">
+    <kbd>infile</kbd>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">seqboot</span>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><span class="big"> = </span><kbd>infile</kbd>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">protdist</span>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><span class="big"> = </span><kbd>infile</kbd>
+    <p style="margin-top:1.5em">
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">fitch</span>
+    <span class="multi"><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><br><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outtree</kbd><span class="big"> = </span><kbd>intree</kbd></span>
+    <span class="big">&#8663;&nbsp;</span><span class="box">consense</span>
+    <span class="multi"><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><br><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outtree</kbd>
+    </div>
+  <li>Run <kbd>seqboot</kbd> with &ldquo;J=jacknife&rdquo; and &ldquo;R=100&rdquo; on the M-Coffee alignment to create 100 mini-alignments.
+  <li>Run <kbd>protdist</kbd> with &ldquo;P=JTT&rdquo; and &ldquo;M=YES&rdquo; with 100 replicate datasets. Make sure it runs right through the 100 datasets. If it does not, redo the previous step with a different random number to generate an appropriate dataset.
+  <li>Run <kbd>fitch</kbd> with &ldquo;G=yes&rdquo; and &ldquo;M=100&rdquo; to build 100 trees.
+  <li>Run <kbd>consense</kbd>, whose input is the 100 trees in the <kbd>outtree</kbd> file produced by <kbd>fitch</kbd>. Before running <kbd>consense</kbd>, rename this file to <kbd>intree</kbd>:
+<p>
+<table class="command"><tr><td><pre>
+mv outtree intree
+</pre></table>
+  <li>Check that <kbd>outfile</kbd> and <kbd>outtree</kbd> files now contain the consensus tree in the human-readable and machine-readable formats, respectively.
+</ol>
+
+<div id="pars" class="sectitle">Parsimony tree</div>
+<hr>
+<ol>
+  <li>In the <kbd>lab04</kbd> directory, make a subdirectory <kbd>pars</kbd>.
+  <li>Copy your Phylip format M-Coffee alignment file from the <kbd>lab03</kbd> directory to the <kbd>pars</kbd> directory and rename it <kbd>infile</kbd>.
+  <li>Go to the <kbd>pars</kbd> directory and check that <kbd>infile</kbd> is there.
+  <li>No renaming is necessary this time:
+    <div class="flow">
+    <kbd>infile</kbd>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">protpars</span>
+    <span class="multi"><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><br><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outtree</kbd>
+    </div>
+  <li>Run <kbd>protpars</kbd> with default parameters on the M-Coffee alignment.
+  <li>Check that <kbd>outfile</kbd> and <kbd>outtree</kbd> files each contain a properly built tree.
+</ol>
+
+<div id="bootpars" class="sectitle">Bootstrapped parsimony tree</div>
+<hr>
+<ol>
+  <li>In the <kbd>lab04</kbd> directory, make a subdirectory <kbd>boot-pars</kbd>.
+  <li>Copy your Phylip format M-Coffee alignment file from the <kbd>lab03</kbd> directory to the <kbd>boot-pars</kbd> directory and rename it <kbd>infile</kbd>.
+  <li>Go to the <kbd>boot-pars</kbd> directory and check that <kbd>infile</kbd> is there.
+  <li>Renaming needs to be done twice:
+    <div class="flow">
+    <kbd>infile</kbd>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">seqboot</span>
+    <span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><span class="big"> = </span><kbd>infile</kbd>
+    <p style="margin-top:1.5em">
+    <span class="big">&nbsp;&#10157;&nbsp;</span><span class="box">protpars</span>
+    <span class="multi"><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><br><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outtree</kbd><span class="big"> = </span><kbd>intree</kbd></span>
+    <span class="big">&#8663;&nbsp;</span><span class="box">consense</span>
+    <span class="multi"><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outfile</kbd><br><span class="big">&nbsp;&#10157;&nbsp;</span><kbd>outtree</kbd>
+    </div>
+  <li>Run <kbd>seqboot</kbd> with &ldquo;J=jackknife&rdquo; and &ldquo;R=100&rdquo; on the M-Coffee alignment to create 100 mini-alignments.
+  <li>Run <kbd>protpars</kbd> with &ldquo;M=100&rdquo; on the alignments you just created, to create 100 trees. When it askes about jumbling, jumble just once.
+  <li>Run <kbd>consense</kbd> on the 100 trees. Remember to  rename <kbd>outtree</kbd> to <kbd>intree</kbd> before running it.
+  <li>Check that <kbd>outfile</kbd> and <kbd>outtree</kbd> files each contain a properly built consensus tree.
+</ol>
+
+<div id="viz" class="sectitle">Visualization and interpretation of phylogenetic trees</div>
+<hr>
+<ol>
+  <li>Check that you have four subdirectories under <kbd>lab04</kbd>, and that each subdirectory contains <kbd>outfile</kbd> and <kbd>outtree</kbd>.
+  <li>In the <kbd>lab04</kbd> directory, make a subeirectory <kbd>viz</kbd>.
+  <li>Copy each <kbd>outtree</kbd> file to the <kbd>viz</kbd> directory, but rename each one with a distinct name to indicate the tree creation method. Make sure not to mix them up and check that there are four tree files with appropriate names after copying. For example, the copy commands can be:
+<p>
+<table class="command"><tr><td><pre>
+cp dist/outtree viz/dist.tree
+cp boot-dist/outtree viz/boot-dist.tree
+cp pars/outtree viz/pars.tree
+cp boot-pars/outtree viz/boot-pars.tree
+</pre></table>
+  <li>Run Dendroscope (command <kbd>dendroscope</kbd>). Open <kbd>dist.tree</kbd> and <kbd>boot-dist.tree</kbd>, and try different tree layouts under &ldquo;Layout&rdquo;. Select &ldquo;Rectangular Phylogram&rdquo; as your final layout.
+  <li>In the <kbd>dist.tree</kbd> and <kbd>boot-dist.tree</kbd> windows, view the edge weights by &ldquo;Select &#9656; Select All&rdquo; and then &ldquo;View &#9656; Label Edges by Weights&rdquo;, and answer these questions:
+  <ul class="level2">
+    <li>How are the scale bars in the two trees different?
+    <li>What do the edge label numbers represent in <kbd>dist.tree</kbd>? How can you use these numbers in estimating the relatedness of the sequences (and organisms they come from)?
+    <li>What do the numbers tell you about the consensus tree in <kbd>boot-dist.tree</kbd>? 
+  </ul>
+  <li>Go back to your <kbd>lab03</kbd> directory, and obtain information about the organisms for your sequences with this command:
+<p>
+<table class="command"><tr><td><pre>
+grep ">" proteins.fasta
+</pre></table>
+  <li>With the organism information, view the two trees again. Describe whether each tree makes sense in terms of relatedness of the organisms.
+</ol>
+
+<div id="comp" class="sectitle">Comparison of phylogenetic trees</div>
+<hr>
+<ol>
+  <li>Go to the <a href="http://phylo.io" target="_blank"><i>Phylo.io</i></a> website. Select &ldquo;Compare&rdquo;, which allows you to compare two trees.
+  <li>Upload your <kbd>boot-dist.tree</kbd> and <kbd>boot-pars.tree</kbd>, and &ldquo;Render&rdquo; them. Visually compare the trees with these tips:
+  <ul class="level2">
+    <li>Darker blue edge colors indicate higher similarity.
+    <li>Click on a node (small circle) of a tree and select &ldquo;highlight>&rdquo;. This will make the leaves under that node of the tree appear as green in both trees. Increasing the node size under &ldquo;Settings&rdquo; can make node selections easier to do.
+  </ul>
+  <li>Compare <kbd>pars.tree</kbd> and <kbd>boot-pars.tree</kbd>, by changing the first tree to <kbd>pars.tree</kbd> and rendering again. Notes about inputting <kbd>pars.tree</kbd>:
+  <ul class="level2">
+    <li>If you get an error &ldquo;This is not a tree file!&rdquo;, it is because branch lengths are missing. Copying and pasting the contents of <kbd>pars.tree</kbd> into the text box will work.
+    <li>If you used the copy/paste method to input a tree, type in the tree name over &ldquo;<i>Untitled</i>&rdquo; to tell yourself which tree you are viewing.
+  </ul>
+  <li>You just did two comparisons: bootstrapped trees (<kbd>boot-dist.tree</kbd> vs. <kbd>boot-pars.tree</kbd>) and parsimony trees (<kbd>pars.tree</kbd> vs. <kbd>boot-pars.tree</kbd>). Which pair of trees are more similar? How did you reach your conclusion?
+</ol>
+
+</div>
