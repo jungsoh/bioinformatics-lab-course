@@ -12,4 +12,4 @@ The topics include (with *sequence* meaning DNA sequence):
 - Gene list functional annotation
 - Metagenomic analysis
 
-There are 6 lecture slide decks in `lectures` and 9 lab exercise sets in `labs`. Some labs do not have corresponding lecture slides.
+There are 5 lecture slide decks in `lectures` and 8 lab exercise sets in `labs`. Some labs do not have corresponding lecture slides.
